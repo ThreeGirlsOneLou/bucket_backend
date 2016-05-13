@@ -3,6 +3,7 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const locationSchema = require('location');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  locations:  [locationSchema],
   passwordDigest: String,
 }, {
   timestamps: true,
