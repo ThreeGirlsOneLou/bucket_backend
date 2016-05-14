@@ -3,7 +3,53 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const locationSchema = require('location');
+
+
+ // Location Schema... Child schema for User
+
+const locationSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+  },
+  region: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  coords: {
+    lat: {
+      type: Number,
+      require: true
+    },
+    long: {
+      type: Number,
+      require: true
+    },
+  },
+  visited: {
+    type: Boolean,
+    require: true,
+    default: false,
+  },
+  comment: {
+    type: String,
+  },
+}, {
+  timestamps: true,
+});
+
+
+const Location = mongoose.model('Location', locationSchema);
+
+module.exports = Location;
+
+
+// User Schema
 
 const userSchema = new mongoose.Schema({
   email: {

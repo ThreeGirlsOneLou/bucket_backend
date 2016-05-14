@@ -2,6 +2,7 @@
 
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
+const User = models.user;
 const Location = models.location;
 
 const authenticate = require('./concerns/authenticate');
@@ -19,11 +20,17 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  let location = Object.assign(req.body.location);
-  Location.create(location)
-    .then(location => res.json({ location }))
-    .catch(err => next(err));
+  User.findById(req.body.user.id).then (function(user){
+    let location = Object.assign(req.body.location);
+    user.locations.push(location);
+    return user.save();
+  })
+  .then(user => res.json({ user }))
+  .catch(err => next(err));
 };
+
+
+
 
 const update = (req, res, next) => {
   let search = { _id: req.params.id};
@@ -60,5 +67,5 @@ module.exports = controller({
   update,
   destroy,
 }, { before: [
-  { method: authenticate, except: ['index', 'show'] },
+  { method: authenticate, except: ['index', 'show', 'create'] },
 ], });
