@@ -2,13 +2,13 @@ curl --include --request POST http://localhost:3000/locations \
   --header "Content-Type: application/json" \
   --data '{
     "user": {
-      "id": "57364508038cdf3df77b406f"
+      "id": "57367b0041aca8458585a139"
     },
     "location": {
-      "name": "example name",
+      "name": "again",
       "coords": {
-        "lat": 434,
-        "long": 34534
+        "lat": 434343,
+        "long": 34534343
       }
     }
   }'

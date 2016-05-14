@@ -8,14 +8,22 @@ const Location = models.location;
 const authenticate = require('./concerns/authenticate');
 
 const index = (req, res, next) => {
-  Location.find()
-    .then(locations => res.json({ locations }))
-    .catch(err => next(err));
+  User.findById(req.body.user.id).then (function(user){
+    let locations = user.locations;
+    return locations;
+  })
+  .then(locations => res.json({ locations }))
+  .catch(err => next(err));
 };
 
+
 const show = (req, res, next) => {
-  Location.findById(req.params.id)
-    .then(location => location ? res.json({ location }) : next())
+   User.findById(req.body.user.id).then (function(user) {
+     console.log(user);
+     console.log(user.locations);
+     return locations;
+   })
+    .then(locations => locations ? res.json( {locations} ) : next())
     .catch(err => next(err));
 };
 
