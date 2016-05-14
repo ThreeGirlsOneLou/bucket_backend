@@ -53,20 +53,34 @@ const update = (req, res, next) => {
     })
     .catch(err => next(err));
 };
+//
+// const destroy = (req, res, next) => {
+//   User.findById(req.body.user.id).then (function(user){
+//     let location = user.locations.id(req.body.location.id);
+//     return location;
+//   })
+//     .then(location => {
+//       if (!location) {
+//         return next();
+//       }
+//       return location.remove()
+//       .then(() => res.sendStatus(200));
+//     })
+//     .catch(err => next(err));
+// };
+
 
 const destroy = (req, res, next) => {
-  let search = { _id: req.params.id};
-  Location.findOne(search)
-    .then(location => {
-      if (!location) {
-        return next();
+  User.findByIdAndUpdate(req.body.user.id, {
+      '$pull': {
+          'locations':{ '_id': req.body.location.id }
       }
-
-      return location.remove()
-        .then(() => res.sendStatus(200));
-    })
+  })
+    .then(() => res.sendStatus(200))
     .catch(err => next(err));
 };
+
+
 
 module.exports = controller({
   index,
@@ -75,5 +89,5 @@ module.exports = controller({
   update,
   destroy,
 }, { before: [
-  { method: authenticate, except: ['index', 'show', 'create'] },
+  { method: authenticate, except: ['index', 'show', 'create', 'destroy'] },
 ], });
