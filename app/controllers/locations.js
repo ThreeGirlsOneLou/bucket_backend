@@ -38,37 +38,19 @@ const create = (req, res, next) => {
 };
 
 
-
-
 const update = (req, res, next) => {
-  let search = { _id: req.params.id};
-  Location.findOne(search)
-    .then(location => {
-      if (!location) {
-        return next();
+  let name = req.body.location.name;
+  console.log( User.findById({ "_id": req.body.user.id}));
+  User.findByIdAndUpdate(
+    { "_id": req.body.user.id, "locations._id": req.body.location.id },
+    {
+      '$set': {
+          'locations.$': { "name": name }
       }
-
-      return location.update(req.body.location)
-        .then(() => res.sendStatus(200));
-    })
+  })
+    .then(() => res.sendStatus(200))
     .catch(err => next(err));
 };
-//
-// const destroy = (req, res, next) => {
-//   User.findById(req.body.user.id).then (function(user){
-//     let location = user.locations.id(req.body.location.id);
-//     return location;
-//   })
-//     .then(location => {
-//       if (!location) {
-//         return next();
-//       }
-//       return location.remove()
-//       .then(() => res.sendStatus(200));
-//     })
-//     .catch(err => next(err));
-// };
-
 
 const destroy = (req, res, next) => {
   User.findByIdAndUpdate(req.body.user.id, {
@@ -89,5 +71,5 @@ module.exports = controller({
   update,
   destroy,
 }, { before: [
-  { method: authenticate, except: ['index', 'show', 'create', 'destroy'] },
+  { method: authenticate, except: ['index', 'show', 'create', 'destroy', 'update'] },
 ], });
