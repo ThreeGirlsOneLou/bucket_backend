@@ -16,7 +16,6 @@ const index = (req, res, next) => {
   .catch(err => next(err));
 };
 
-
 const show = (req, res, next) => {
    User.findById(req.body.user.id).then (function(user) {
      console.log(user);
@@ -37,38 +36,31 @@ const create = (req, res, next) => {
   .catch(err => next(err));
 };
 
-
-
-
 const update = (req, res, next) => {
-  let search = { _id: req.params.id};
-  Location.findOne(search)
-    .then(location => {
-      if (!location) {
-        return next();
+  let change = req.body.location.change;
+  let field = req.body.location.field;
+  User.findById(req.body.user.id).then( function (user) {
+    let match = false;
+    user.locations.forEach( function (location) {
+      if(location._id == req.body.location.id) {
+        location[field] = change;
+        match = true;
       }
-
-      return location.update(req.body.location)
-        .then(() => res.sendStatus(200));
-    })
+    });
+    if (match) {
+      return user.save();
+    } else {
+      return next();
+    }
+  })
+    .then(user => res.json({ user }))
     .catch(err => next(err));
 };
-//
-// const destroy = (req, res, next) => {
-//   User.findById(req.body.user.id).then (function(user){
-//     let location = user.locations.id(req.body.location.id);
-//     return location;
-//   })
-//     .then(location => {
-//       if (!location) {
-//         return next();
-//       }
-//       return location.remove()
-//       .then(() => res.sendStatus(200));
-//     })
-//     .catch(err => next(err));
-// };
 
+// this code updates a location within mongo in terminal:
+// db.users.update(
+//   {"_id" : ObjectId("5738beeafbc48d7b5d9ef4bc"), "locations._id" : ObjectId("5738c97c307c011a5ecacf1e") },
+//   {$set : {"locations.$.visited" : true} })
 
 const destroy = (req, res, next) => {
   User.findByIdAndUpdate(req.body.user.id, {
@@ -80,8 +72,6 @@ const destroy = (req, res, next) => {
     .catch(err => next(err));
 };
 
-
-
 module.exports = controller({
   index,
   show,
@@ -89,5 +79,5 @@ module.exports = controller({
   update,
   destroy,
 }, { before: [
-  { method: authenticate, except: ['index', 'show', 'create', 'destroy'] },
+  { method: authenticate, except: ['index', 'show', 'create', 'destroy', 'update'] },
 ], });
