@@ -78,5 +78,5 @@ module.exports = controller({
   update,
   destroy,
 }, { before: [
-  { method: authenticate, except: ['index', 'show', 'create', 'destroy', 'update'] },
+  { method: authenticate, except: ['index', 'show'] },
 ], });
