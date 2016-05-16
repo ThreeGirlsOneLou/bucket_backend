@@ -16,6 +16,15 @@ const index = (req, res, next) => {
   .catch(err => next(err));
 };
 
+const indexUserLocations = (req, res, next) => {
+  User.findById(req.query.user_id).then (function(user){
+    let locations = user.locations;
+    return locations;
+  })
+  .then(locations => res.json({ locations }))
+  .catch(err => next(err));
+};
+
 const show = (req, res, next) => {
    Location.findById(req.body.user.id).then (function(user) {
      let locations = user.locations;
@@ -77,6 +86,7 @@ module.exports = controller({
   create,
   update,
   destroy,
+  indexUserLocations,
 }, { before: [
-  { method: authenticate, except: ['index', 'show'] },
+  { method: authenticate, except: ['index', 'show', 'indexUserLocations'] },
 ], });
