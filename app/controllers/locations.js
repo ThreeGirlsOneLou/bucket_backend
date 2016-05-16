@@ -17,12 +17,11 @@ const index = (req, res, next) => {
 };
 
 const show = (req, res, next) => {
-   User.findById(req.body.user.id).then (function(user) {
-     console.log(user);
-     console.log(user.locations);
+   Location.findById(req.body.user.id).then (function(user) {
+     let locations = user.locations;
      return locations;
    })
-    .then(locations => locations ? res.json( {locations} ) : next())
+    .then(location => location ? res.json( {location} ) : next())
     .catch(err => next(err));
 };
 
