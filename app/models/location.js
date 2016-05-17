@@ -32,8 +32,8 @@ const locationSchema = new mongoose.Schema({
    require: true,
    default: false,
  },
- comment: {
-   type: String,
+ url: {
+   type: String
  },
 }, {
  timestamps: true,
