@@ -5,6 +5,9 @@ Our group created an app, WanderList, based on the idea of a "bucket list".  A b
 Heroku Deployment
 https://cryptic-brushlands-42769.herokuapp.com
 
+Frontend Repo
+https://github.com/ThreeGirlsOneLou/bucket_frontend
+
 ## Routes
 
 .post('/sign-up', 'users#signup')
